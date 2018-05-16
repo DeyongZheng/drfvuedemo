@@ -1,0 +1,73 @@
+{% load  static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生徒学習履歴</title>
+  <link rel="stylesheet" href="{% static 'frontend/styles.css' %}" />
+  <!--<script src="{% static 'frontend/vue.js' %}"></script>  -->
+  <!--<script src="{% static 'frontend/vue-paginate.js' %}"></script> -->
+  <!--<script src="{% static 'frontend/axios.js' %}"></script> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.0/vue.js "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.js "></script>
+  <script src="https://cdn.jsdelivr.net/vuejs-paginator/2.0.0/vuejs-paginator.min.js"></script>
+</head>
+<body>
+  <h1>生徒学習履歴</h1>
+  <div id="app">
+    <table>
+      <thead>
+        <tr>
+	  <th>生徒ID</th>
+	  <th>名前</th>
+	  <th>解いた問題数</th>
+	  <th>正解数</th>
+	  <th>学習時間(分)</th>
+	</tr>
+      </thead>
+      <tbody>
+        <tr v-for="record in info.data.results">
+	  <td>${ record.student.id }$</td>
+	  <td>${ record.student.lastname }$ ${ record.student.firstname }$</td>
+	  <td>${ record.questions }$</td>
+	  <td>${ record.correct }$</td>
+	  <td>${ record.elapsedtime }$</td>
+	</tr>
+      </tbody>
+    </table>
+</div>
+
+<script>
+var protocol = location.protocol
+var slashes = protocol.concat("//")
+var host = slashes.concat(window.location.hostname)
+
+new Vue({
+  delimiters: ['${', '}$'],
+  el: '#app',
+  components: {
+        VPaginator: VuePaginator
+  },
+  data() {
+    info: [],
+    resource_url: '/api/history',
+    options: {
+      remote_data: 'data.results',
+      remote_next_page_url: 'data.next',
+      remote_prev_page_url: 'data.previous',
+      next_button_text: 'Go Next',
+      previous_button_text: 'Go Back'
+    }
+  },
+  methonds: {
+    updateResource(data){
+      this.info = data
+    }
+  }
+})
+</script>
+</body>
+
+</html>

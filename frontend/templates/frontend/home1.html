@@ -1,0 +1,70 @@
+{% load  static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生徒学習履歴</title>
+  <link rel="stylesheet" href="{% static 'frontend/styles.css' %}" />
+  <script src="{% static 'frontend/vue.js' %}"></script>
+  <script src="{% static 'frontend/axios.js' %}"></script>
+</head>
+<body>
+  <h1>生徒学習履歴</h1>
+  <div id="app">
+    <ul class="pagination">
+      <li v-if="info.data.previous != null "><a herf="${ info.data.previous }$">&lt;</a></li>
+      <li v-if="info.data.next != null "> <a herf="${ info.data.next }$">&gt;</a></li>
+    </ul>
+    <table>
+      <thead>
+        <tr>
+	  <th>生徒ID</th>
+	  <th>名前</th>
+	  <th>解いた問題数</th>
+	  <th>正解数</th>
+	  <th>学習時間(分)</th>
+	</tr>
+      </thead>
+      <tbody>
+        <tr v-for="record in info.data.results">
+	  <td>${ record.student.id }$</td>
+	  <td>${ record.student.lastname }$ ${ record.student.firstname }$</td>
+	  <td>${ record.questions }$</td>
+	  <td>${ record.correct }$</td>
+	  <td>${ record.elapsedtime }$</td>
+	</tr>
+      </tbody>
+    </table>
+    <ul class="pagination">
+      <li v-if="info.data.previous != null "> &lt;</li>
+      <li v-if="info.data.next != null "> <a herf="${ info.data.next }$">&gt;</a></li>
+
+      <li v-for="n in (info.data.count/100)">
+        <a href="javascripit:void(0)" v-bind:class="activeNumber === n + 1 ? 'active' : ''">${ n + 1 }$</a>
+      </li>
+    </ul>
+</div>
+
+<script>
+var protocol = location.protocol
+var slashes = protocol.concat("//")
+var host = slashes.concat(window.location.hostname)
+
+new Vue({
+  delimiters: ['${', '}$'],
+  el: '#app',
+  data() {
+    return {
+      info: null
+    }
+  },
+  mounted () {
+    axios.get(host + ':8000/api/history/')
+      .then(response => (this.info = response))
+  }
+})
+</script>
+</body>
+
+</html>
