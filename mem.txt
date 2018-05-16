@@ -1,0 +1,21 @@
+1. データベースを作成し、テストデータをインポートする
+   test/ddl.sql
+   
+2. django環境をセットアップする
+virtualenv env
+source env/bin/activate
+pip install -r requirements
+
+3. django rest framework プロジェクトの初期化
+
+  #django-admin.py startproject demo
+  #cd demo
+  #python manage.py startapp frontend
+  #python manage.py startapp backend
+
+python manage.py makemigrate
+python manage.py migrate
+python manage.py createsuperuser 
+python manage.py runserver 0.0.0.0:8000
+
+
